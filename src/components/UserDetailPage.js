@@ -1,23 +1,32 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { fetchUserById } from '../api';
-
+import { Box, IconButton, Typography, Button } from '@mui/material';
+import MailIcon from '@mui/icons-material/Mail';
+import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
+import LanguageIcon from '@mui/icons-material/Language';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 const UserDetailPage = () => {
     const { id } = useParams();
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
 
-    useEffect(() => {
-        const getUser = async () => {
+    const getUser = async () => {
+        try {
+            setLoading(true);
+            setError("");
             const data = await fetchUserById(id);
             setUser(data);
-            // Simulate a delay to show loader
-            setTimeout(() => {
-                setLoading(false);
-            }, 2000);
-        };
+        } catch (error) {
+            setError("Error Fetching");
+        } finally {
+            setLoading(false);
+        }
+    };
 
+    useEffect(() => {
         getUser();
     }, [id]);
 
@@ -25,30 +34,78 @@ const UserDetailPage = () => {
         window.history.back();
     };
 
+    const handleRetry = () => {
+        getUser();
+    };
+
     return (
-        <div style={{ backgroundColor: "#2ecc71", height: "100vh" }}>
+        <Box sx={{ bgcolor: "primary.main", height: "100vh" }}>
             {loading ? (
-                <div style={{ height: "100vh" }} className='d-flex justify-content-center align-items-center'>
-                    <span className="loader"></span>
-                </div>
+                <Box sx={{ height: "100vh" }} className='d-flex justify-content-center align-items-center'>
+                    <Box component="span" className="loader"></Box>
+                </Box>
             ) : (
                 <>
                     {user ? (
                         <>
-                            <h1>{user.name}</h1>
-                            <p><i className="fa-solid fa-envelope me-1"></i><span className='fw-bold'>Email: </span>{user.email}</p>
-                            <p><i className="fa-solid fa-phone me-1"></i><span className='fw-bold'>Phone: </span>{user.phone}</p>
-                            <p><i className="fa-solid fa-globe me-1"></i><span className='fw-bold'>Website: </span>{user.website}</p>
-                            <button onClick={handleBack} style={{ margin: "10px", padding: "10px 20px", cursor: "pointer", backgroundColor: "white", color: "#2ecc71" }}>
+                            <Typography variant='h4'>{user.name}</Typography>
+                            <Box component="p">
+                                <Box className='fw-bold' component="span">
+                                    <IconButton><MailIcon /></IconButton>
+                                    Email:
+                                </Box>
+                                {user.email}
+                            </Box>
+
+                            <Box component="p">
+                                <Box className='fw-bold' component="span">
+                                    <IconButton><LocalPhoneIcon /></IconButton>
+                                    Phone:
+                                </Box>
+                                {user.phone}
+                            </Box>
+
+                            <Box component="p">
+                                <Box className='fw-bold' component="span">
+                                    <IconButton><LanguageIcon /></IconButton>
+                                    Website:
+                                </Box>
+                                {user.website}
+                            </Box>
+
+                            <Button
+                                variant='text'
+                                sx={{ margin: "10px", padding: "10px 20px", color: "white" }}
+                                onClick={handleBack}
+                            >
+                                <IconButton><ArrowBackIcon /></IconButton>
                                 Back
-                            </button>
+                            </Button>
                         </>
                     ) : (
-                        <p>User not found</p>
+                        <Box
+                            component="h2"
+                            sx={{
+                                display: "flex",
+                                flexDirection: "column",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                height: "100vh"
+                            }}
+                        >
+                            <Typography variant="h6">{error}</Typography>
+                            <Button
+                                sx={{ color: "white", border: "1px solid", marginTop: "20px" }}
+                                variant="text"
+                                onClick={handleRetry}
+                            >
+                                Try Again
+                            </Button>
+                        </Box>
                     )}
                 </>
             )}
-        </div>
+        </Box>
     );
 };
 

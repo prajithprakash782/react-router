@@ -6,6 +6,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import logo_image from "../assests/logo.png"
 import profile from "../assests/profile.png"
+import { Box, Button } from '@mui/material';
 
 function Header() {
     const navigate = useNavigate();
@@ -21,7 +22,7 @@ function Header() {
     };
 
     return (
-        <div>
+        <Box>
             <Navbar bg="dark" data-bs-theme="dark">
                 <Container>
                     <NavLink className="d-flex align-items-center text-decoration-none text-light fw-bold fs-5" to="/">
@@ -40,23 +41,25 @@ function Header() {
                         <NavLink style={{ textDecoration: "none" }} className='ms-4' to="/contact">Contact</NavLink>
 
                         {isAuthenticated ? (
-                            <div className='d-flex align-items-center'>
-                                <div className='ms-3'>
+                            <Box className='d-flex align-items-center'>
+                                <Box className='ms-3'>
                                     <img width={30} height={30} src={profile} alt="" />
                                     <Link style={{ textDecoration: "none" }} to="/users">Users Page</Link>
-                                </div>
-                                <button className='ms-3' onClick={handleLogout}>Logout</button>
+                                </Box>
+                                <Button variant='contained' className='ms-5' onClick={handleLogout}>Logout</Button>
                                 
-                            </div>
+                                
+                            </Box>
                         ) : (
-                            <button className='ms-5' onClick={handleLogin}>Login</button>
+                            <Button variant='contained' className='ms-5' onClick={handleLogin}>Login</Button>
+                            
                         )}
 
 
                     </Nav>
                 </Container>
             </Navbar>
-        </div>
+        </Box>
     )
 }
 

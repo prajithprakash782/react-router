@@ -1,4 +1,5 @@
 
+import { Box, Button, TextField, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -8,7 +9,7 @@ function Login() {
   const navigate = useNavigate();
 
   const handleLogin = () => {
-   
+
     if (username === 'pprajith' && password === 'prajith') {
       localStorage.setItem('isAuthenticated', 'true');
       navigate('/');
@@ -18,24 +19,33 @@ function Login() {
   };
 
   return (
-    <div style={{height:"100vh"}} className='d-flex justify-content-center align-items-center flex-column'>
-      <h2>Login</h2>
-      <input 
+    <Box sx={{
+      display:"flex",
+      justifyContent:"center",
+      alignItems:"center",
+      flexDirection:"column",
+      height:"100vh"}}>
+      <Typography variant='h4'>Login</Typography>
+      <TextField
         className='mt-3'
-        type="text"
-        placeholder="Username"
+        id="standard-basic"
+        label="Username"
+        variant="standard"
         value={username}
-        onChange={(e) => setUsername(e.target.value)}
-      />
-      <input
-      className='mt-3'
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <button className="mt-3" onClick={handleLogin}>Login</button>
-    </div>
+        onChange={(e) => setUsername(e.target.value)} />
+
+      <TextField
+      className='mt-3' 
+      id="standard-basic" 
+      label="Password" 
+      variant="standard" 
+      value={password}
+      onChange={(e) => setPassword(e.target.value)}/>
+
+      <Button className='mt-3' variant='contained' onClick={handleLogin}> Login</Button>
+     
+      
+    </Box>
   );
 }
 

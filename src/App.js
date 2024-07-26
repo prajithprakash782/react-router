@@ -10,11 +10,22 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Login from './pages/Login';
 import UserPage from './components/UserPage';
 import UserDetailPage from './components/UserDetailPage';
+import { createTheme, ThemeProvider } from '@mui/material';
 
 function App() {
+
+  const theme = createTheme({
+    palette:{
+      primary:{
+        main:"#03e67c"
+      }
+    }
+  })
   return (
     <div>
+      <ThemeProvider theme={theme}>
       <Header />
+
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/" element={<HomePage />} />
@@ -24,6 +35,7 @@ function App() {
         <Route path="/user/:id" element={<ProtectedRoute><UserDetailPage /></ProtectedRoute>} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
+      </ThemeProvider>
     </div>
   );
 }
